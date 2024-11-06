@@ -9,12 +9,12 @@ import {TokensPair, User} from '../utils/interfaces';
 })
 export class AuthService {
 
+  private host = "http://localhost:8080";
+
   private userSubject: BehaviorSubject<any | null>;
   public user: Observable<User | null>;
   private accessToken: string | undefined;
   private refreshToken: string | null;
-
-  private authHost = 'http://localhost:3000';
 
   constructor(private router: Router, private http: HttpClient) {
     this.refreshToken = localStorage.getItem('user');
@@ -32,7 +32,7 @@ export class AuthService {
 
   login(username: string, password: number): Promise<TokensPair> {
     return new Promise((resolve, reject) => {
-      this.http.post<TokensPair>(`${this.authHost}/auth`, { username: username, password: password })
+      this.http.post<TokensPair>(`${this.host}/auth`, { username: username, password: password })
         .subscribe({next: value => {
             localStorage.setItem('user', value.refresh_token);
             this.refreshToken = value.refresh_token;
@@ -74,7 +74,7 @@ export class AuthService {
   }
 
   refreshTokenFn(): Observable<HttpResponse<Object>> {
-    return this.http.post(`${this.authHost}/refresh`, {}, {observe: 'response', headers: {'Authorization': `Bearer ${this.refreshToken}`}}).pipe();
+    return this.http.post(`${this.host}/refresh`, {}, {observe: 'response', headers: {'Authorization': `Bearer ${this.refreshToken}`}}).pipe();
   }
 
   updateRefreshToken(jwtRefresh: string) {
