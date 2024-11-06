@@ -32,7 +32,7 @@ export class AuthService {
 
   login(username: string, password: number): Promise<TokensPair> {
     return new Promise((resolve, reject) => {
-      this.http.post<TokensPair>(`${this.host}/auth`, { username: username, password: password })
+      this.http.post<TokensPair>(`${this.host}/login`, { username: username, password: password })
         .subscribe({next: value => {
             localStorage.setItem('user', value.refresh_token);
             this.refreshToken = value.refresh_token;
