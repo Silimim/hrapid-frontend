@@ -1,1 +1,19 @@
-<p>layout works!</p>
+<div>
+  <p-menubar [model]="menuItems">
+    <ng-template pTemplate="start">
+
+    </ng-template>
+    <ng-template pTemplate="item" let-item let-root="root">
+      <a pRipple class="menu-item p-menuitem-link">
+        <span [class]="item.icon"></span>
+        <span style="margin-left: 1rem">{{ item.label }}</span>
+      </a>
+    </ng-template>
+    <ng-template pTemplate="end">
+      <div class="flex align-items-center gap-2">
+        {{ authService.userValue.username }}
+        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle"/>
+      </div>
+    </ng-template>
+  </p-menubar>
+</div>

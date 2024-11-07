@@ -49,7 +49,7 @@ export class LoginComponent {
           this.router.navigateByUrl(returnUrl);
         },
         (err) => {
-          this.messageService.add({severity:'error', summary:'Error', detail: err.error});
+          this.messageService.add({severity:'error', summary:'Error', detail: 'Invalid credentials'});
         }
       );
     }

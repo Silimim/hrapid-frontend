@@ -1,14 +1,16 @@
 <div class="login-container">
   <p-card header="Accedi">
     <form [formGroup]="loginGroup">
-      <p-floatLabel style="width: 100%;">
-        <input style="width: 100%;" pInputText id="username" [formControl]="username"/>
-        <label for="username">Username</label>
-      </p-floatLabel>
-      <p-floatLabel>
-        <p-password [feedback]="false" id="password" [formControl]="password" [toggleMask]="true"/>
-        <label for="password">Password</label>
-      </p-floatLabel>
+      <div style="display: flex; flex-direction: column; gap: 2rem">
+        <p-floatLabel style="width: 100%;">
+          <input style="width: 100%;" pInputText id="username" [formControl]="username"/>
+          <label for="username">Username</label>
+        </p-floatLabel>
+        <p-floatLabel>
+          <p-password [feedback]="false" id="password" [formControl]="password" [toggleMask]="true"/>
+          <label for="password">Password</label>
+        </p-floatLabel>
+      </div>
       <p-button type="button" label="Login" (click)="loginGroup.valid ? login() : null" [disabled]="!loginGroup.valid"/>
     </form>
   </p-card>
