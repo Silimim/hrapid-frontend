@@ -17,7 +17,7 @@ export class AuthService {
   private refreshToken: string | null;
 
   constructor(private router: Router, private http: HttpClient) {
-    this.refreshToken = localStorage.getItem('user');
+    this.refreshToken = localStorage.getItem('hrapid-token');
     this.userSubject = new BehaviorSubject(undefined);
     this.user = this.userSubject.asObservable();
   }
@@ -34,7 +34,7 @@ export class AuthService {
     return new Promise((resolve, reject) => {
       this.http.post<TokensPair>(`${this.host}/login`, { username: username, password: password })
         .subscribe({next: value => {
-            localStorage.setItem('user', value.refresh_token);
+            localStorage.setItem('hrapid-token', value.refresh_token.toString());
             this.refreshToken = value.refresh_token;
             this.accessToken = value.access_token;
             this.userSubject.next(this.getUserFromToken(this.accessToken));
@@ -47,7 +47,7 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem('user');
+    localStorage.removeItem('hrapid-token');
     this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
@@ -78,7 +78,7 @@ export class AuthService {
   }
 
   updateRefreshToken(jwtRefresh: string) {
-    localStorage.setItem('user', jwtRefresh);
+    localStorage.setItem('hrapid-token', jwtRefresh);
     this.refreshToken = jwtRefresh;
   }
 
