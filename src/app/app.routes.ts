@@ -11,6 +11,7 @@ export const routes: Routes = [
   },
   {
     path: '',
+    title: 'Home',
     component: LayoutComponent,
     canActivate: [authGuard],
   }
