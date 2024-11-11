@@ -1,0 +1,29 @@
+<div class="p-card p-3">
+  @if (tableData && tableData.length > 0) {
+    <p-table [value]="tableData" [resizableColumns]="true" [columns]="tableColumns" [tableStyle]="{'min-width': '50rem'}">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          @for (column of tableColumns; track tableColumns) {
+            <th pResizableColumn [pSortableColumn]="column.field" style="width:25%">
+              {{ column.header }} <p-sortIcon [field]="column.field" />
+            </th>
+          }
+        </tr>
+        <tr>
+          @for (column of tableColumns; track tableColumns) {
+            <th>
+              <p-columnFilter [type]="column.type" [field]="column.field" [showClearButton]="false" />
+            </th>
+          }
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-product let-columns="columns">
+        <tr>
+          @for (column of tableColumns; track tableColumns) {
+            <td>{{ product[column.field] }}</td>
+          }
+        </tr>
+      </ng-template>
+    </p-table>
+  }
+</div>
