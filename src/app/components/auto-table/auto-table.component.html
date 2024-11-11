@@ -17,10 +17,10 @@
           }
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-product let-columns="columns">
+      <ng-template pTemplate="body" let-data let-columns="columns">
         <tr>
           @for (column of tableColumns; track tableColumns) {
-            <td>{{ product[column.field] }}</td>
+            <td>{{ data[column.field] }}</td>
           }
         </tr>
       </ng-template>
