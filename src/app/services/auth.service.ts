@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {HttpClient, HttpErrorResponse, HttpResponse} from '@angular/common/http';
 import {Router} from '@angular/router';
@@ -32,8 +32,9 @@ export class AuthService {
 
   login(username: string, password: number): Promise<TokensPair> {
     return new Promise((resolve, reject) => {
-      this.http.post<TokensPair>(`${this.host}/login`, { username: username, password: password })
-        .subscribe({next: value => {
+      this.http.post<TokensPair>(`${this.host}/login`, {username: username, password: password})
+        .subscribe({
+          next: value => {
             localStorage.setItem('hrapid-token', value.refresh_token.toString());
             this.refreshToken = value.refresh_token;
             this.accessToken = value.access_token;
@@ -42,7 +43,8 @@ export class AuthService {
           },
           error: (err: HttpErrorResponse) => {
             reject(err);
-          }});
+          }
+        });
     });
   }
 
@@ -52,7 +54,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  getUserFromToken(jwt: string): User {
+  getUserFromToken(jwt: string): any {
     let username;
     let email;
     let roles;
@@ -66,7 +68,9 @@ export class AuthService {
             username = payloadDecoded.username;
             roles = payloadDecoded.roles;
             email = payloadDecoded.email;
-          } catch (e) {}
+          } catch (e) {
+            console.log(e);
+          }
         }
       }
     }
@@ -74,7 +78,10 @@ export class AuthService {
   }
 
   refreshTokenFn(): Observable<HttpResponse<Object>> {
-    return this.http.post(`${this.host}/refresh`, {}, {observe: 'response', headers: {'Authorization': `Bearer ${this.refreshToken}`}}).pipe();
+    return this.http.post(`${this.host}/refresh`, {}, {
+      observe: 'response',
+      headers: {'Authorization': `Bearer ${this.refreshToken}`}
+    }).pipe();
   }
 
   updateRefreshToken(jwtRefresh: string) {
