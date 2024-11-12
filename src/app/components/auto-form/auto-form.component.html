@@ -1,0 +1,61 @@
+@if (form) {
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    @for (header of autoTableHeaders; track header) {
+      @switch (header.inputType) {
+        @case ("number") {
+          @switch (header.formatType.type) {
+            @case ("currency") {
+              <p-floatLabel>
+                <p-inputNumber
+                  [formControlName]="header.field"
+                  mode="currency"
+                  [inputId]="header.field"
+                  currency="EUR"/>
+                <label [for]="header.field">{{ header.header }}</label>
+              </p-floatLabel>
+            }
+            @default {
+              <p-floatLabel>
+                <p-inputNumber
+                  [formControlName]="header.field"
+                  [inputId]="header.field"
+                  [minFractionDigits]="2"/>
+                <label [for]="header.field">{{ header.header }}</label>
+              </p-floatLabel>
+            }
+          }
+        }
+        @case ("select") {
+          <p-floatLabel>
+            <p-dropdown [options]="getEnumKeys(header.formatType)"
+                        [formControlName]="header.field"
+                        [id]="header.field"
+                        [showClear]="true"
+                        [filter]="true">
+              <ng-template pTemplate="selectedItem">
+                <div class="flex items-center gap-2" *ngIf="form.controls[header.field].value">
+                  <p-tag [value]="form.controls[header.field].value" [severity]="getSeverity(form.controls[header.field].value, header.formatType.enum!)"></p-tag>
+                </div>
+              </ng-template>
+              <ng-template let-country pTemplate="item">
+                <div class="flex items-center gap-2" *ngIf="form.controls[header.field].value">
+                  <p-tag [value]="form.controls[header.field].value" [severity]="getSeverity(form.controls[header.field].value, header.formatType.enum!)"></p-tag>
+                </div>
+              </ng-template>
+            </p-dropdown>
+            <label [for]="header.field">{{ header.header }}</label>
+          </p-floatLabel>
+        }
+        @default {
+          <p-floatLabel>
+            <input pInputText [id]="header.field" [required]="header.required" [formControlName]="header.field"/>
+            <label [for]="header.field">{{ header.header }}</label>
+          </p-floatLabel>
+        }
+      }
+    }
+    <div>
+      <button type="submit" [disabled]="!form.valid">Save</button>
+    </div>
+  </form>
+}

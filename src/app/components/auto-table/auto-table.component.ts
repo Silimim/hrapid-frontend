@@ -9,6 +9,8 @@ import {IconFieldModule} from 'primeng/iconfield';
 import {DropdownModule} from 'primeng/dropdown';
 import {TagModule} from 'primeng/tag';
 import {FormsModule} from '@angular/forms';
+import {DialogModule} from 'primeng/dialog';
+import {AutoFormComponent} from '../auto-form/auto-form.component';
 
 @Component({
   selector: 'auto-table',
@@ -21,7 +23,9 @@ import {FormsModule} from '@angular/forms';
     IconFieldModule,
     DropdownModule,
     TagModule,
-    FormsModule
+    FormsModule,
+    DialogModule,
+    AutoFormComponent
   ],
   templateUrl: './auto-table.component.html',
   styleUrl: './auto-table.component.css'
@@ -38,6 +42,8 @@ export class AutoTableComponent implements OnInit {
 
   loading: boolean = true;
 
+  showModal: boolean = false;
+
   constructor(private http: HttpClient, private messageService: MessageService) {
   }
 
@@ -52,7 +58,9 @@ export class AutoTableComponent implements OnInit {
               field: header.field,
               header: header.header,
               type: this.getColumnType(header.type),
-              formatType: header.formatType
+              formatType: header.formatType,
+              inputType: header.inputType,
+              required: header.required
             };
           });
           this.loading = false;
@@ -91,6 +99,6 @@ export class AutoTableComponent implements OnInit {
   }
 
   addRow() {
-
+    this.showModal = true
   }
 }

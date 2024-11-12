@@ -67,6 +67,8 @@ export interface AutoTableHeaders {
   field: string;
   type: string;
   formatType: AutoTableFormat;
+  inputType: string;
+  required: boolean;
 }
 
 export interface AutoTableFormat {

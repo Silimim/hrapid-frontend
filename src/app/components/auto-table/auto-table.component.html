@@ -17,8 +17,10 @@
       <ng-template pTemplate="caption">
         <div class="flex justify-between">
           <p-button [outlined]="true" icon="pi pi-filter-slash" label="Clear" (onClick)="dt.clear()" />
-          <p-button [outlined]="true" icon="pi pi-file-excel" label="Export" (onClick)="dt.exportCSV()" />
-          <p-button [outlined]="true" icon="pi pi-add" label="Add" (onClick)="addRow()" />
+          <div class="flex gap-4">
+            <p-button [outlined]="true" icon="pi pi-file-excel" label="Export" (onClick)="dt.exportCSV()" />
+            <p-button [outlined]="true" icon="pi pi-plus" label="Add" (onClick)="addRow()" />
+          </div>
         </div>
       </ng-template>
       <ng-template pTemplate="header" let-columns>
@@ -60,7 +62,7 @@
                 </td>
               }
               @case ("currency") {
-                <td>{{ data[column.field] | currency: 'USD' }}</td>
+                <td>{{ data[column.field] | currency: 'EUR' }}</td>
               }
               @default {
                 <td>{{ data[column.field] }}</td>
@@ -72,3 +74,6 @@
     </p-table>
   }
 </div>
+<p-dialog [header]="'Add '" [modal]="true" [(visible)]="showModal" [style]="{ width: '25rem' }">
+  <app-auto-form [autoTableHeaders]="tableColumns"></app-auto-form>
+</p-dialog>
