@@ -66,4 +66,10 @@ export interface AutoTableHeaders {
   header: string;
   field: string;
   type: string;
+  formatType: AutoTableFormat;
+}
+
+export interface AutoTableFormat {
+  type: string | null;
+  enum: { key: string, value: any }[] | null;
 }
