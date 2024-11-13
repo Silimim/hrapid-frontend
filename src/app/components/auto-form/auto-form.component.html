@@ -1,61 +1,66 @@
-@if (form) {
-  <form (ngSubmit)="onSubmit()" [formGroup]="form">
-    @for (header of autoTableHeaders; track header) {
-      @switch (header.inputType) {
-        @case ("number") {
-          @switch (header.formatType.type) {
-            @case ("currency") {
-              <p-floatLabel>
-                <p-inputNumber
+<div class="p-4">
+  @if (form) {
+    <form class="pt-3" (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div class="flex flex-col gap-2">
+        @for (header of autoTableHeaders; track header) {
+          <div class="flex items-center gap-3 mb-3">
+            @switch (header.inputType) {
+              @case ("number") {
+                @switch (header.formatType.type) {
+                  @case ("currency") {
+                    <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                    <p-inputNumber
+                      class="flex-auto"
+                      styleClass="flex-auto"
+                      [formControlName]="header.field"
+                      mode="currency"
+                      [inputId]="header.field"
+                      [minFractionDigits]="2"
+                      currency="EUR"/>
+                  }
+                  @default {
+                    <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                    <p-inputNumber
+                      class="flex-auto"
+                      styleClass="flex-auto"
+                      [formControlName]="header.field"
+                      [inputId]="header.field"
+                      [minFractionDigits]="2"/>
+                  }
+                }
+              }
+              @case ("select") {
+                <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                <p-dropdown
+                  class="flex-auto"
+                  styleClass="flex flex-auto"
+                  [options]="getEnumKeys(header.formatType)"
                   [formControlName]="header.field"
-                  mode="currency"
-                  [inputId]="header.field"
-                  currency="EUR"/>
-                <label [for]="header.field">{{ header.header }}</label>
-              </p-floatLabel>
+                  [id]="header.field"
+                  [filter]="true">
+                  <ng-template pTemplate="selectedItem">
+                    <div class="flex items-center gap-2" *ngIf="form.controls[header.field].value">
+                      <p-tag [value]="form.controls[header.field].value"
+                             [severity]="getSeverity(form.controls[header.field].value, header.formatType.enum!)"></p-tag>
+                    </div>
+                  </ng-template>
+                  <ng-template let-status pTemplate="item">
+                    <div class="flex items-center gap-2">
+                      <p-tag [value]="status"
+                             [severity]="getSeverity(status, header.formatType.enum!)"></p-tag>
+                    </div>
+                  </ng-template>
+                </p-dropdown>
+              }
+              @default {
+                <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                <input class="flex-auto" pInputText [id]="header.field" [required]="header.required"
+                       [formControlName]="header.field"/>
+              }
             }
-            @default {
-              <p-floatLabel>
-                <p-inputNumber
-                  [formControlName]="header.field"
-                  [inputId]="header.field"
-                  [minFractionDigits]="2"/>
-                <label [for]="header.field">{{ header.header }}</label>
-              </p-floatLabel>
-            }
-          }
+          </div>
         }
-        @case ("select") {
-          <p-floatLabel>
-            <p-dropdown [options]="getEnumKeys(header.formatType)"
-                        [formControlName]="header.field"
-                        [id]="header.field"
-                        [showClear]="true"
-                        [filter]="true">
-              <ng-template pTemplate="selectedItem">
-                <div class="flex items-center gap-2" *ngIf="form.controls[header.field].value">
-                  <p-tag [value]="form.controls[header.field].value" [severity]="getSeverity(form.controls[header.field].value, header.formatType.enum!)"></p-tag>
-                </div>
-              </ng-template>
-              <ng-template let-country pTemplate="item">
-                <div class="flex items-center gap-2" *ngIf="form.controls[header.field].value">
-                  <p-tag [value]="form.controls[header.field].value" [severity]="getSeverity(form.controls[header.field].value, header.formatType.enum!)"></p-tag>
-                </div>
-              </ng-template>
-            </p-dropdown>
-            <label [for]="header.field">{{ header.header }}</label>
-          </p-floatLabel>
-        }
-        @default {
-          <p-floatLabel>
-            <input pInputText [id]="header.field" [required]="header.required" [formControlName]="header.field"/>
-            <label [for]="header.field">{{ header.header }}</label>
-          </p-floatLabel>
-        }
-      }
-    }
-    <div>
-      <button type="submit" [disabled]="!form.valid">Save</button>
-    </div>
-  </form>
-}
+      </div>
+    </form>
+  }
+</div>

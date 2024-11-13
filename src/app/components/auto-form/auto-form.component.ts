@@ -1,4 +1,4 @@
-import {AfterContentInit, AfterViewInit, Component, Input, OnInit} from '@angular/core';
+import {AfterContentInit, AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AutoFormService} from '../../services/auto-form.service';
 import {AutoTableFormat, AutoTableHeaders} from '../../utils/interfaces';
@@ -10,9 +10,11 @@ import {DropdownModule} from 'primeng/dropdown';
 import {NgIf} from '@angular/common';
 import {ChipModule} from 'primeng/chip';
 import {TagModule} from 'primeng/tag';
+import {Observable} from 'rxjs';
+import {Button} from 'primeng/button';
 
 @Component({
-  selector: 'app-auto-form',
+  selector: 'auto-form',
   standalone: true,
   imports: [
     ReactiveFormsModule,
@@ -22,23 +24,33 @@ import {TagModule} from 'primeng/tag';
     DropdownModule,
     NgIf,
     ChipModule,
-    TagModule
+    TagModule,
+    Button
   ],
+  providers: [AutoFormService],
   templateUrl: './auto-form.component.html',
   styleUrl: './auto-form.component.css'
 })
-export class AutoFormComponent implements OnInit, AfterContentInit {
+export class AutoFormComponent implements OnInit, OnChanges {
   @Input() autoTableHeaders: AutoTableHeaders[] | undefined;
 
   form!: FormGroup;
 
   constructor(private autoFormService: AutoFormService) {
+
   }
 
   ngOnInit() {
     if (this.autoTableHeaders) {
+      this.autoTableHeaders = this.autoTableHeaders.filter((header) => header.field !== 'id');
       this.form = this.autoFormService.toFormGroup(this.autoTableHeaders);
-      console.log(this.form)
+    }
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['autoTableHeaders'] && this.autoTableHeaders) {
+      this.autoTableHeaders = this.autoTableHeaders.filter((header) => header.field !== 'id');
+      this.form = this.autoFormService.toFormGroup(this.autoTableHeaders);
     }
   }
 
@@ -53,12 +65,5 @@ export class AutoFormComponent implements OnInit, AfterContentInit {
   getSeverity(status: string, enumType: { key: string, value: any }[]): any {
     const found = enumType.find((item) => item.key === status);
     return found ? found.value : 'info';
-  }
-
-  ngAfterContentInit(): void {
-    if (this.autoTableHeaders) {
-      this.form = this.autoFormService.toFormGroup(this.autoTableHeaders);
-      console.log(this.form)
-    }
   }
 }
