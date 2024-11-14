@@ -2,7 +2,7 @@ import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {Table, TableModule} from 'primeng/table';
 import {HttpClient} from '@angular/common/http';
 import {MessageService} from 'primeng/api';
-import {AutoTable, AutoTableHeaders} from '../../utils/interfaces';
+import {AutoFormMode, AutoTable, AutoTableHeaders, CrudPaths} from '../../utils/interfaces';
 import {CurrencyPipe, DatePipe} from '@angular/common';
 import {Button} from 'primeng/button';
 import {IconFieldModule} from 'primeng/iconfield';
@@ -32,7 +32,7 @@ import {AutoFormComponent} from '../auto-form/auto-form.component';
 })
 export class AutoTableComponent implements OnInit {
 
-  @Input() tableName: string | undefined;
+  @Input() crudPaths: CrudPaths | undefined;
 
   @ViewChild('dt') table: Table | undefined;
 
@@ -43,14 +43,15 @@ export class AutoTableComponent implements OnInit {
   loading: boolean = true;
 
   showModal: boolean = false;
+  modalMode: AutoFormMode = AutoFormMode.Add;
 
   constructor(private http: HttpClient, private messageService: MessageService) {
   }
 
   ngOnInit() {
 
-    if (this.tableName) {
-      this.http.get<AutoTable>(`http://localhost:8080/table/${this.tableName}`).subscribe({
+    if (this.crudPaths?.get) {
+      this.http.get<AutoTable>(`http://localhost:8080/table/${this.crudPaths?.get}`).subscribe({
         next: (data) => {
           this.tableData = data.data.length ? data.data : [];
           this.tableColumns = data.headers.map((header) => {
@@ -99,6 +100,7 @@ export class AutoTableComponent implements OnInit {
   }
 
   addRow() {
+    this.modalMode = AutoFormMode.Add;
     this.showModal = true
   }
 }

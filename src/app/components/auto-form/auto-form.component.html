@@ -1,4 +1,4 @@
-<div class="p-4">
+<p-dialog [header]="mode.toString()" [modal]="true" [visible]="showModal" (visibleChange)="visibleChange($event)" [style]="{ width: '50%' }">
   @if (form) {
     <form class="pt-3" (ngSubmit)="onSubmit()" [formGroup]="form">
       <div class="flex flex-col gap-2">
@@ -8,7 +8,7 @@
               @case ("number") {
                 @switch (header.formatType.type) {
                   @case ("currency") {
-                    <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                    <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header + (header.required ? ' *' : '') }}</label>
                     <p-inputNumber
                       class="flex-auto"
                       styleClass="flex-auto"
@@ -19,7 +19,7 @@
                       currency="EUR"/>
                   }
                   @default {
-                    <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                    <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header + (header.required ? ' *' : '')}}</label>
                     <p-inputNumber
                       class="flex-auto"
                       styleClass="flex-auto"
@@ -30,7 +30,7 @@
                 }
               }
               @case ("select") {
-                <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header + (header.required ? ' *' : '')}}</label>
                 <p-dropdown
                   class="flex-auto"
                   styleClass="flex flex-auto"
@@ -53,7 +53,7 @@
                 </p-dropdown>
               }
               @default {
-                <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header }}</label>
+                <label class="font-semibold w-[6rem]" [for]="header.field">{{ header.header + (header.required ? ' *' : '')}}</label>
                 <input class="flex-auto" pInputText [id]="header.field" [required]="header.required"
                        [formControlName]="header.field"/>
               }
@@ -61,6 +61,10 @@
           </div>
         }
       </div>
+      <div class="py-5 flex justify-end gap-2">
+        <p-button label="Cancel" severity="secondary" (onClick)="showModal = false; form.reset()"/>
+        <p-button type="submit" label="Save" (onClick)="showModal = false"/>
+      </div>
     </form>
   }
-</div>
+</p-dialog>

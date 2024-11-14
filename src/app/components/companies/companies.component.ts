@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {AutoTableComponent} from '../auto-table/auto-table.component';
-import {Company} from '../../utils/interfaces';
+import {Company, CrudPaths} from '../../utils/interfaces';
 
 @Component({
   selector: 'app-companies',
@@ -13,4 +13,12 @@ import {Company} from '../../utils/interfaces';
 })
 export class CompaniesComponent {
 
+  crudPaths: CrudPaths = {
+    get: 'companies',
+    add: 'company',
+    edit: 'company',
+    delete: 'company'
+  };
+
+  constructor() {}
 }
