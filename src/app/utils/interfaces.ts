@@ -4,6 +4,11 @@ export enum Role {
   User = 'USER',
 }
 
+export enum AutoFormMode {
+  Add = 'ADD',
+  Edit = 'EDIT',
+}
+
 export interface User {
   id: number;
   name: string;
@@ -74,4 +79,12 @@ export interface AutoTableHeaders {
 export interface AutoTableFormat {
   type: string | null;
   enum: { key: string, value: any }[] | null;
+}
+
+
+export interface CrudPaths {
+  get: string;
+  add: string;
+  edit: string;
+  delete: string;
 }
