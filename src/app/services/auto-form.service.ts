@@ -18,7 +18,7 @@ export class AutoFormService {
         label: header.header,
         required: header.required,
         controlType: header.inputType,
-        type: header.type
+        type: this.convertType(header.type),
       });
     });
   }
@@ -32,5 +32,26 @@ export class AutoFormService {
         : new FormControl(field.value || '');
     });
     return new FormGroup(group);
+  }
+
+  convertType(type: string): string {
+    switch (type) {
+      case 'time.Time':
+      case '*time.Time':
+        return 'date';
+      case 'int32':
+      case '*int32':
+      case 'float64':
+      case '*float64':
+        return 'numeric';
+      case 'boolean':
+        return 'boolean';
+      case 'object':
+        return 'object';
+      case 'string':
+      case '*string':
+      default:
+        return 'text';
+    }
   }
 }
