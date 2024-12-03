@@ -36,7 +36,6 @@ import {MessageService} from 'primeng/api';
     Button,
     DialogModule
   ],
-  providers: [AutoFormService],
   templateUrl: './auto-form.component.html',
   styleUrl: './auto-form.component.css'
 })
@@ -45,15 +44,16 @@ export class AutoFormComponent implements OnInit, OnChanges {
   @Input() mode!: AutoFormMode;
   @Input() crudPaths!: CrudPaths;
   @Input() showModal!: boolean;
+  @Input() rowData: any | undefined;
 
   @Output() showModalChange: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   @Output() refreshData: EventEmitter<boolean> = new EventEmitter<boolean>();
 
   form!: FormGroup;
+  rowId: number | undefined;
 
   constructor(private autoFormService: AutoFormService, private http: HttpClient, private messageService: MessageService) {
-
   }
 
   ngOnInit() {
@@ -64,27 +64,32 @@ export class AutoFormComponent implements OnInit, OnChanges {
       this.autoTableHeaders = this.autoTableHeaders.filter((header) => header.field !== 'id' && header.field !== 'date_added' && header.field !== 'user_added_id');
       this.form = this.autoFormService.toFormGroup(this.autoTableHeaders);
     }
+    if (changes['rowData'] && this.rowData) {
+      this.form.patchValue(this.rowData);
+      this.rowId = this.rowData.id;
+    }
   }
 
   onSubmit() {
     if (this.form.valid) {
       if (this.mode === AutoFormMode.Add) {
         this.http.post('http://localhost:8080/api/' + this.crudPaths.add, this.form.value).subscribe({
-          next: (data) => {
+          next: () => {
             this.refreshData.emit(true);
+            this.messageService.add({severity: 'success', summary: 'Success', detail: 'Record added successfully'});
           },
-          error: (error) => {
-            console.error(error);
+          error: () => {
             this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error adding record'});
           }
         });
       } else {
-        this.http.put('http://localhost:8080/api/' + this.crudPaths.edit, this.form.value).subscribe({
-          next: (data) => {
+        let data = {id: this.rowId, ...this.form.value};
+        this.http.put('http://localhost:8080/api/' + this.crudPaths.edit, data).subscribe({
+          next: () => {
             this.refreshData.emit(true);
+            this.messageService.add({severity: 'success', summary: 'Success', detail: 'Record updated successfully'});
           },
-          error: (error) => {
-            console.error(error);
+          error: () => {
             this.messageService.add({severity: 'error', summary: 'Error', detail: 'Error updating record'});
           }
         });
@@ -102,6 +107,8 @@ export class AutoFormComponent implements OnInit, OnChanges {
   }
 
   visibleChange(event: any) {
+    this.rowData = undefined;
     this.showModalChange.emit(event);
+    this.form.reset();
   }
 }

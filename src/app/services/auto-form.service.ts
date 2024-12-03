@@ -18,7 +18,7 @@ export class AutoFormService {
         label: header.header,
         required: header.required,
         controlType: header.inputType,
-        type: this.convertType(header.type),
+        type: this.convertType(header.type)
       });
     });
   }
@@ -28,8 +28,8 @@ export class AutoFormService {
     const group: any = {};
     fields.forEach((field) => {
       group[field.key] = field.required
-        ? new FormControl(field.value || '', Validators.required)
-        : new FormControl(field.value || '');
+        ? new FormControl(field.value || null, Validators.required)
+        : new FormControl(field.value || null);
     });
     return new FormGroup(group);
   }
