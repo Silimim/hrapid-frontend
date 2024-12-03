@@ -12,12 +12,15 @@
     </a>
   </ng-template>
   <ng-template pTemplate="end">
-    <div class="flex items-center gap-2">
-      <p class="text-xl my-0 font-semibold">
-        {{ authService.userValue.username }}
-      </p>
-      <p-avatar class="flex items-center" image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
-    </div>
+    <p-button [text]="true" (onClick)="menu.toggle($event)" >
+      <div class="flex items-center gap-2">
+        <p class="text-xl my-0 font-semibold">
+          {{ authService.userValue.username }}
+        </p>
+        <p-avatar class="flex items-center" image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+      </div>
+    </p-button>
+    <p-tieredMenu #menu [model]="accountItems" [popup]="true" />
   </ng-template>
 </p-menubar>
 <router-outlet></router-outlet>

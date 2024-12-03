@@ -9,6 +9,8 @@ import {AuthService} from '../../services/auth.service';
 import {MessageService} from 'primeng/api';
 import {ToastModule} from 'primeng/toast';
 import {Router} from '@angular/router';
+import {Button} from 'primeng/button';
+import {TieredMenuModule} from 'primeng/tieredmenu';
 
 @Component({
   selector: 'app-layout',
@@ -21,7 +23,9 @@ import {Router} from '@angular/router';
     NgClass,
     AvatarModule,
     InputTextModule,
-    ToastModule
+    ToastModule,
+    Button,
+    TieredMenuModule
   ],
   providers: [MessageService],
   templateUrl: './layout.component.html',
@@ -33,8 +37,18 @@ export class LayoutComponent {
     {label: 'Companies', icon: 'pi pi-fw pi-home', path: '/companies'},
     {label: 'Employees', icon: 'pi pi-fw pi-users', path: '/employees'},
     {label: 'Lists', icon: 'pi pi-fw pi-list', path: '/lists'},
-  ]
+  ];
 
-  constructor(public authService: AuthService, public router: Router) {
-  }
+  accountItems = [
+    {
+      label: 'Sign Out',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        this.authService.logout();
+        this.router.navigate(['/login']);
+      }
+    }
+  ];
+
+  constructor(public authService: AuthService, public router: Router) {}
 }
